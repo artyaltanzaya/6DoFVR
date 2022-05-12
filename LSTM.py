@@ -52,7 +52,6 @@ for index,name in enumerate(classes):
             rows = list()
             for line in lines:
                 row = line[5:8] + line[18:21] + line[31:34] + line[41:59] 
-                #row = [line[2], line[6], line[7], line[11], line[12], line[13], line[14], line[15], line[16]] 
                 row = np.array(row, dtype='float32')
                 rows.append(row)
             trainData.append((torch.tensor(rows).cuda(), label))
@@ -68,7 +67,6 @@ for index,name in enumerate(classes):
             rows = list()
             for line in lines:
                 row = line[5:8] + line[18:21] + line[31:34] + line[41:59] 
-#                 row = [line[2], line[6], line[7], line[11], line[12], line[13], line[14], line[15], line[16]] 
                 row = np.array(row, dtype='float32')
                 rows.append(row) 
             testData.append((torch.tensor(rows).cuda(), label))
@@ -121,7 +119,7 @@ class LSTM(nn.Module):
             batch_first=True, 
         )
 
-        self.out = nn.Linear(hidden_size, num_classes)    # 输出层
+        self.out = nn.Linear(hidden_size, num_classes)  
 
     def forward(self, x):
         
@@ -159,7 +157,7 @@ for epoch in range(1, epochs + 1):
         
         loss = criterion(py, ty)
         loss.backward()
-        optimizer.step()  #更新参数
+        optimizer.step() 
         
         if step == 0:
             _, predicted = torch.max(py, 1)
@@ -188,8 +186,8 @@ for step, (tx, ty) in enumerate(testloader):
         
     _, predicted = torch.max(py, 1)
 
-    total += ty.size(0)  # 記錄總個數
-    correct += (predicted == ty).sum()  # 分配正確的個數
+    total += ty.size(0)
+    correct += (predicted == ty).sum()  
     acc = float(correct)/float(total)
     acc_list.append(acc)
     loss_list.append(loss.item())
